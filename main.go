@@ -1,7 +1,21 @@
 package main
 
-import "fmt"
+import (
+	pb "github.com/haoZhangran/common_sdk/protoc_gen_code/zproject/user_service"
+	"google.golang.org/grpc"
+	"net"
+	"zproject/user_service/common/consts"
+)
 
 func main() {
-	fmt.Println("Hello")
+	lis, err := net.Listen("tcp", consts.Port)
+	if err != nil {
+		panic(err)
+	}
+
+	s := grpc.NewServer()
+	pb.RegisterUserServiceServer(s, &server{})
+	if err := s.Serve(lis); err != nil {
+		panic(err)
+	}
 }
