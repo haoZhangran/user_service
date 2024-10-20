@@ -7,12 +7,16 @@ import (
 	"zproject/user_service/common/consts"
 )
 
+func MustInit() {
+	initAPP()
+}
+
 func main() {
 	lis, err := net.Listen("tcp", consts.Port)
 	if err != nil {
 		panic(err)
 	}
-
+	MustInit()
 	s := grpc.NewServer()
 	pb.RegisterUserServiceServer(s, &server{})
 	if err := s.Serve(lis); err != nil {
